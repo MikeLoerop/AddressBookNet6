@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AddressBook.Data;
 using AddressBook.Models;
+using AddressBookNet6.Services.Interfaces;
 
 namespace AddressBookNet6.Controllers
 {
@@ -15,9 +16,12 @@ namespace AddressBookNet6.Controllers
     {
         private readonly ApplicationDbContext _context;
 
-        public ContactsController(ApplicationDbContext context)
+        private readonly IImageService _imageService;
+
+        public ContactsController(ApplicationDbContext context, IImageService imageService)
         {
             _context = context;
+            _imageService = imageService;
         }
 
         // GET: Contacts
@@ -55,10 +59,16 @@ namespace AddressBookNet6.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("FirstName,LastName,Address1,Address2,City,State,Zip,Email,Phone,Created,ImageData,ImageType,Id")] Contact contact)
+        public async Task<IActionResult> Create([Bind("FirstName,LastName,Address1,Address2,City,State,Zip,Email,Phone,Created,ImageData,ImageType,ImageFile,Id")] Contact contact)
         {
             if (ModelState.IsValid)
             {
+                if (contact.ImageFile != null)
+                { 
+                    contact.ImageData = await _imageService.ConvertFileToByteArrayAsync(contact.ImageFile);
+                    contact.ImageType = contact.ImageFile.ContentType;
+                }
+
                 _context.Add(contact);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
