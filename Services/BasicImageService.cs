@@ -5,7 +5,7 @@ namespace AddressBookNet6.Services
     public class BasicImageService : IImageService
     {
 
-        public string CovertByteArrayToFile(byte[] fileData, string extension)
+        public string ConvertByteArrayToFile(byte[] fileData, string extension)
         {
             if (fileData is null) return string.Empty;
 

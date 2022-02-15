@@ -30,14 +30,15 @@ namespace AddressBook.Models
         [DataType(DataType.PhoneNumber)]
         public string Phone { get; set; }
 
-        public DateTime Created { get; set; }
+        [DataType(DataType.DateTime)]
+        public DateTime? Created { get; set; }
 
         [NotMapped]
         [Display(Name = "Image")]
         [DataType(DataType.Upload)]
-        public IFormFile ImageFile { get; set; }
-        public byte[] ImageData { get; set; }
-        public string ImageType { get; set; }
+        public IFormFile? ImageFile { get; set; }
+        public byte[]? ImageData { get; set; }
+        public string? ImageType { get; set; }
 
         public int Id { get; set; }
 

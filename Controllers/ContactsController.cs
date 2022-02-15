@@ -69,6 +69,10 @@ namespace AddressBookNet6.Controllers
                     contact.ImageType = contact.ImageFile.ContentType;
                 }
 
+                //Getting errors from Postgres that it can't take in the time format from the View > Contacts > Create
+                //I didn't like that the user had to input a date and time on their own, so I'm just adding it behind the scenes.
+                contact.Created = DateTime.UtcNow;
+
                 _context.Add(contact);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
